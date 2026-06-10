@@ -24,8 +24,6 @@ C++
 
 Мова програмування: C++
 
-Графічна бібліотека: SFML (Simple and Fast Multimedia Library)
-
 Середовище розробки: (Visual Studio / Code::Blocks / CLion)
 
 Стандарт: C++17
