@@ -3,6 +3,11 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <locale>
+#include <codecvt>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 using namespace std;
 
@@ -25,43 +30,43 @@ private:
     static void drawOne() {
         cout << "+-------+\n";
         cout << "|       |\n";
-        cout << "|   *   |\n";
+        cout << "|   •   |\n";
         cout << "|       |\n";
         cout << "+-------+\n";
     }
     static void drawTwo() {
         cout << "+-------+\n";
-        cout << "| *     |\n";
+        cout << "| •     |\n";
         cout << "|       |\n";
-        cout << "|     * |\n";
+        cout << "|     • |\n";
         cout << "+-------+\n";
     }
     static void drawThree() {
         cout << "+-------+\n";
-        cout << "| *     |\n";
-        cout << "|   *   |\n";
-        cout << "|     * |\n";
+        cout << "| •     |\n";
+        cout << "|   •   |\n";
+        cout << "|     • |\n";
         cout << "+-------+\n";
     }
     static void drawFour() {
         cout << "+-------+\n";
-        cout << "| *   * |\n";
+        cout << "| •   • |\n";
         cout << "|       |\n";
-        cout << "| *   * |\n";
+        cout << "| •   • |\n";
         cout << "+-------+\n";
     }
     static void drawFive() {
         cout << "+-------+\n";
-        cout << "| *   * |\n";
-        cout << "|   *   |\n";
-        cout << "| *   * |\n";
+        cout << "| •   • |\n";
+        cout << "|   •   |\n";
+        cout << "| •   • |\n";
         cout << "+-------+\n";
     }
     static void drawSix() {
         cout << "+-------+\n";
-        cout << "| *   * |\n";
-        cout << "| *   * |\n";
-        cout << "| *   * |\n";
+        cout << "| •   • |\n";
+        cout << "| •   • |\n";
+        cout << "| •   • |\n";
         cout << "+-------+\n";
     }
 };
@@ -218,7 +223,7 @@ public:
 
     void playClassicMode() {
         cout << "\n========== РЕЖИМ: ХТО БІЛЬШЕ ОЧОК ==========\n";
-        cout << "Кожен гравець кидає 5 кісток. Хто набрав більше очок - переміг!\n\n";
+        cout << "Кожен гравець кидає 5 кісток. Хто набрав більше очок — переміг!\n\n";
 
         for(size_t i = 0; i < players.size(); i++) {
             cout << "--- Хід гравця: " << players[i].getName() << " ---\n";
@@ -244,7 +249,7 @@ public:
 
     void playFirstTo100() {
         cout << "\n========== РЕЖИМ: ПЕРШИЙ ДО " << targetScore << " ==========\n";
-        cout << "Гравці по черзі кидають кістки. Перший, хто досягне " << targetScore << " очок - переміг!\n\n";
+        cout << "Гравці по черзі кидають кістки. Перший, хто досягне " << targetScore << " очок — переміг!\n\n";
 
         bool winnerFound = false;
         while(!winnerFound) {
@@ -370,7 +375,11 @@ private:
     GameEngine engine;
 
     void clearScreen() {
+        #ifdef _WIN32
+        system("cls");
+        #else
         cout << "\033[2J\033[H";
+        #endif
     }
 
     void printHeader() {
@@ -394,20 +403,20 @@ private:
         clearScreen();
         printHeader();
         cout << "========== ПРАВИЛА ГРИ ==========\n\n";
-        cout << "Гра в кістки - це класична настільна гра з використанням\n";
+        cout << "Гра в кістки — це класична настільна гра з використанням\n";
         cout << "гральних кубиків (кісток).\n\n";
         cout << "*** МЕТА ГРИ ***\n";
-        cout << "Залежно від обраного режиму - набрати найбільше очок,\n";
+        cout << "Залежно від обраного режиму — набрати найбільше очок,\n";
         cout << "першим досягти цільової кількості очок, або зібрати\n";
         cout << "найкращу комбінацію.\n\n";
         cout << "*** РЕЖИМИ ГРИ ***\n";
-        cout << "1. ХТО БІЛЬШЕ - кожен гравець кидає 5 кісток, перемагає\n";
+        cout << "1. ХТО БІЛЬШЕ — кожен гравець кидає 5 кісток, перемагає\n";
         cout << "   той, у кого більше очок.\n\n";
-        cout << "2. ПЕРШИЙ ДО 100 - гравці по черзі кидають кістки,\n";
-        cout << "   перший, хто досягне 100 очок - переміг.\n\n";
-        cout << "3. НАЙКРАЩИЙ З 5 - проводиться 5 раундів, перемагає\n";
+        cout << "2. ПЕРШИЙ ДО 100 — гравці по черзі кидають кістки,\n";
+        cout << "   перший, хто досягне 100 очок — переміг.\n\n";
+        cout << "3. НАЙКРАЩИЙ З 5 — проводиться 5 раундів, перемагає\n";
         cout << "   той, хто виграв більше раундів.\n\n";
-        cout << "4. ПОКЕР НА КІСТКАХ - зібери найкращу комбінацію!\n\n";
+        cout << "4. ПОКЕР НА КІСТКАХ — зібери найкращу комбінацію!\n\n";
         cout << "*** КЕРУВАННЯ ***\n";
         cout << "- Enter: кинути кістки\n";
         cout << "- Цифри 1-5: вибір пункту меню\n\n";
@@ -427,6 +436,7 @@ private:
 
         if(playerCount < 2 || playerCount > 4) {
             cout << "Помилка! Кількість гравців має бути від 2 до 4.\n";
+            string dummy; getline(cin, dummy);
             return;
         }
 
@@ -467,6 +477,7 @@ private:
     void playGame() {
         if(!engine.hasPlayers()) {
             cout << "\nСпочатку налаштуйте гру (пункт 3 меню)!\n";
+            string dummy; getline(cin, dummy);
             return;
         }
 
@@ -511,7 +522,7 @@ private:
         clearScreen();
         printHeader();
         cout << "========== СТАТИСТИКА ==========\n";
-        cout << "(Функція в розробці - потребує збереження даних)\n\n";
+        cout << "(Функція в розробці — потребує збереження даних)\n\n";
         cout << "Натисніть Enter, щоб повернутися...";
         string dummy; getline(cin, dummy);
     }
@@ -556,6 +567,14 @@ public:
 
 // ==================== ГОЛОВНА ФУНКЦІЯ ====================
 int main() {
+    // Налаштування UTF-8 для коректного відображення кирилиці
+    #ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+    #endif
+    
+    setlocale(LC_ALL, "ru_RU.UTF-8");  // або uk_UA.UTF-8
+
     srand(static_cast<unsigned>(time(0))); 
     
     GameMenu menu;
